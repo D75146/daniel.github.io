@@ -3,6 +3,9 @@
 <head>
   <title>NaijaJobConnect - Apply & Post Jobs</title>
 
+  <!-- Include Paystack Inline JS script -->
+  <script src="https://js.paystack.co/v1/inline.js"></script>
+
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -53,7 +56,9 @@
       background: #28a745;
       color: white;
       padding: 12px 20px;
-      text-decoration: none;
+      border: none;
+      font-size: 16px;
+      cursor: pointer;
       border-radius: 5px;
       display: inline-block;
       margin-top: 20px;
@@ -98,9 +103,10 @@
       </a>
     </div>
 
-    <a href="https://paystack.com/pay/yourpaymentlink" class="post-job" target="_blank">
+    <!-- Button that triggers the Paystack JavaScript function -->
+    <button type="button" class="post-job" onclick="payWithPaystack()">
       Post a Job – ₦5,000
-    </a>
+    </button>
 
   </div>
 
@@ -108,5 +114,27 @@
     <p>© 2026 NaijaJobConnect | Built by You 💪</p>
   </footer>
 
+  <!-- JavaScript code handling the Paystack popup with your key -->
+  <script>
+    function payWithPaystack() {
+      let handler = PaystackPop.setup({
+        key: 'pk_test_cb2c222f698cf1ce0fbb6f0c0b438b44d8b5a924', // Your actual Paystack Public Key
+        email: 'customer@email.com', // Change or prompt user for email if needed
+        amount: 500000, // Amount in kobo (5,000 NGN)
+        currency: 'NGN',
+        ref: '' + Math.floor((Math.random() * 1000000000) + 1), // Generates a unique reference
+        callback: function(response) {
+          alert('Payment complete! Reference: ' + response.reference);
+          // Add your post-payment logic here
+        },
+        onClose: function() {
+          alert('Transaction was not completed, window closed.');
+        }
+      });
+      handler.openIframe();
+    }
+  </script>
+
 </body>
 </html>
+ 
